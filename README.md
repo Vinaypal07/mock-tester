@@ -19,5 +19,6 @@ easy->medium->hard
 ![Image Alt Text](https://github.com/Vinaypal07/MOCK-MASTER/blob/main/Screenshot%202026-01-01%20175230.png)
 ![Image Alt Text](https://github.com/Vinaypal07/MOCK-MASTER/blob/main/Screenshot%202026-01-01%20175347.png)
 ![Image Alt Text](https://github.com/Vinaypal07/MOCK-MASTER/blob/main/Screenshot%202026-01-01%20175431.png)
-![Image Alt Text]()
+![Image Alt Text](https://github.com/Vinaypal07/MOCK-MASTER/blob/main/Screenshot%202026-01-01%20175505.png)
+![Image Alt Text](https://github.com/Vinaypal07/MOCK-MASTER/blob/main/Screenshot%202026-01-01%20175550.png)
 
