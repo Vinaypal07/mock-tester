@@ -1,4 +1,4 @@
-# mock-tester
+# MOCK MASTER
 Conducting the mock Interviews
 
 ## MOCK INTERVIEWER 
