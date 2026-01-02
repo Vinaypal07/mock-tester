@@ -21,10 +21,39 @@ easy->medium->hard
 ![Image Alt Text](https://github.com/Vinaypal07/MOCK-MASTER/blob/main/Screenshot%202026-01-01%20175431.png)
 ![Image Alt Text](https://github.com/Vinaypal07/MOCK-MASTER/blob/main/Screenshot%202026-01-01%20175505.png)
 ![Image Alt Text](https://github.com/Vinaypal07/MOCK-MASTER/blob/main/Screenshot%202026-01-01%20175550.png)
-
-PURPOSE: 
+## PURPOSE: 
 1)To conduct mock interviews to improve candidates confidence in interviews.
 2)As well as to improve candidates knowledge. 
 3)To remove the fear of interviews from the candidate so that they can perform well.
 4)By using this web application you can analyse your weak points and improve. 
-5)In fact candidates can keep track of their time so that they can improve their time management skills during problem solving. 
+5)In fact candidates can keep track of their time so that they can improve their time management skills during problem solving.
+## TOOLS USED:
+  1)z.ai.chatbot-used in the final version of this product
+   2)replit-used to make prototype of this product for research and testing prupose
+   3)chatgpt-used for research purpose and collecting materials
+## techonology used:
+1) machine learning
+2) deep learning
+3) natural language processing(NLP)
+## societal impact:
+Mock interviews 😊 can have a significant impact on society, especially in the context of job preparation and career development.
+
+## Positive impacts:
+1. Boosts confidence: Helps individuals prepare for real interviews, reducing anxiety and nervousness.
+2. Improves communication skills: Practice articulating thoughts, ideas, and experiences.
+3. Identifies areas for improvement: Feedback highlights strengths and weaknesses, enabling targeted preparation.
+4. Enhances employability: Better preparation leads to increased chances of success in actual interviews.
+5. Reduces interview-related stress: Familiarity with the process reduces uncertainty and fear.
+
+## Societal benefits:
+1. Skilled workforce: More prepared candidates lead to a more skilled and competent workforce.
+2. Efficient hiring process: Well-prepared candidates make the hiring process smoother for employers
+3. Promotes meritocracy: Fair evaluation of candidates based on skills and fit.
+
+   ## Potential drawbacks:
+1. Overemphasis on technique: Over-preparation might lead to candidates focusing too much on "acing" interviews rather than genuine skill development.
+2. Inequitable access: Not everyone has equal access to mock interview resources, creating a potential disadvantage.
+
+In India:
+- Common practice for competitive exams (UPSC, banking, tech interviews).
+- Coaching institutes and online platforms offer mock interviews.
