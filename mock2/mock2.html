@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MockMaster | Professional Interview Simulator</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #64748b;
+            --accent: #0f172a;
+            --bg-light: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--surface);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-container {
+            width: 200px;
+            display: none; /* Hidden on start screen */
+        }
+
+        @media (min-width: 768px) {
+            .progress-container {
+                display: block;
+            }
+        }
+
+        .progress-bar-bg {
+            background-color: var(--bg-light);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background-color: var(--primary);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Main Layout */
+        main {
+            flex: 1;
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            width: 100%;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Role Selection */
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .role-card {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .role-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+        }
+
+        .role-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .role-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .role-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Interview Interface */
+        .interview-card {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .badge.tech { background-color: #e0f2fe; color: #0369a1; }
+        .badge.hr { background-color: #fce7f3; color: #be185d; }
+        
+        .difficulty-indicator {
+            float: right;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .diff-easy { color: var(--success); }
+        .diff-medium { color: var(--warning); }
+        .diff-hard { color: var(--danger); }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .answer-area {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            margin-bottom: 1.5rem;
+            transition: border-color 0.2s;
+        }
+
+        .answer-area:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover { background-color: var(--primary-dark); }
+
+        .btn-secondary {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            border: 1px solid #cbd5e1;
+        }
+        .btn-secondary:hover { background-color: #e2e8f0; }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Timer */
+        .timer {
+            font-variant-numeric: tabular-nums;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        /* Report Screen */
+        .report-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary) 0%, #e2e8f0 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+        
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--surface);
+        }
+
+        .score-value {
+            position: relative;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .report-section {
+            background: var(--surface);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .report-section h3 {
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: var(--accent);
+        }
+
+        .skill-bar-container {
+            margin-bottom: 1rem;
+        }
+        
+        .skill-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .skill-track {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .skill-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .feedback-list {
+            list-style: none;
+        }
+
+        .feedback-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .feedback-icon {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: white;
+        }
+        
+        .icon-good { background-color: var(--success); }
+        .icon-bad { background-color: var(--danger); }
+
+        .final-verdict {
+            text-align: center;
+            padding: 2rem;
+            background: var(--accent);
+            color: white;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            transform: translateY(100px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        .toast.show { transform: translateY(0); }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <span>💼</span> MockMaster
+        </div>
+        <div class="progress-container">
+            <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:0.25rem;">
+                <span id="progress-text">Setup</span>
+                <span id="progress-percent">0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-fill"></div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Screen 1: Role Selection -->
+        <section id="screen-role" class="screen active">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h1>Select Your Target Role</h1>
+                <p style="color: var(--text-light); margin-top: 0.5rem;">Choose a position to simulate a realistic interview experience.</p>
+            </div>
+            
+            <div class="role-grid">
+                <div class="role-card" onclick="startInterview('frontend')">
+                    <div class="role-icon">🎨</div>
+                    <div class="role-title">Frontend Developer</div>
+                    <div class="role-desc">HTML, CSS, JavaScript, React, UI/UX Principles</div>
+                </div>
+                <div class="role-card" onclick="startInterview('backend')">
+                    <div class="role-icon">⚙️</div>
+                    <div class="role-title">Backend Developer</div>
+                    <div class="role-desc">Node.js, Python, Databases, API Design, Architecture</div>
+                </div>
+                <div class="role-card" onclick="startInterview('fullstack')">
+                    <div class="role-icon">🌐</div>
+                    <div class="role-title">Full Stack Engineer</div>
+                    <div class="role-desc">Combination of frontend and backend with system design</div>
+                </div>
+                <div class="role-card" onclick="startInterview('devops')">
+                    <div class="role-icon">🚀</div>
+                    <div class="role-title">DevOps Engineer</div>
+                    <div class="role-desc">CI/CD, Docker, Kubernetes, Cloud Infrastructure</div>
+                </div>
+                <div class="role-card" onclick="startInterview('data')">
+                    <div class="role-icon">📊</div>
+                    <div class="role-title">Data Scientist</div>
+                    <div class="role-desc">Python, Machine Learning, Statistics, SQL</div>
+                </div>
+                <div class="role-card" onclick="startInterview('manager')">
+                    <div class="role-icon">👔</div>
+                    <div class="role-title">Product Manager</div>
+                    <div class="role-desc">Agile, Roadmap Planning, Stakeholder Management</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screen 2: Interview Interface -->
+        <section id="screen-interview" class="screen">
+            <div class="interview-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <span class="badge tech" id="q-type-badge">Technical Round</span>
+                    <div class="timer" id="timer">00:00</div>
+                </div>
+                
+                <h2 style="margin-bottom: 1.5rem; font-size: 1rem; color: var(--text-light);">
+                    Question <span id="q-current">1</span> of <span id="q-total">15</span>
+                    <span class="difficulty-indicator" id="q-difficulty">Easy</span>
+                </h2>
+
+                <div class="question-text" id="question-text">
+                    Loading question...
+                </div>
+
+                <textarea class="answer-area" id="answer-input" placeholder="Type your answer here. Be concise but detailed."></textarea>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" id="btn-skip" onclick="skipQuestion()">Skip</button>
+                    <button class="btn btn-primary" onclick="submitAnswer()">Submit Answer <span style="font-size: 1.2em;">→</span></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screen 3: Analysis Loading -->
+        <section id="screen-loading" class="screen" style="text-align: center; padding-top: 4rem;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🤖</div>
+            <h2>Analyzing Performance...</h2>
+            <p style="color: var(--text-light);">Our AI is evaluating your technical answers and HR responses.</p>
+            <div style="margin-top: 2rem; width: 200px; height: 4px; background: #e2e8f0; margin-left: auto; margin-right: auto; overflow: hidden; border-radius: 2px;">
+                <div style="height: 100%; width: 50%; background: var(--primary); animation: slide 1s infinite linear;"></div>
+            </div>
+        </section>
+
+        <!-- Screen 4: Status Report -->
+        <section id="screen-report" class="screen">
+            <div class="report-header">
+                <h1>Interview Status Report</h1>
+                <p style="color: var(--text-light);">Role: <span id="report-role-name" style="font-weight: 600; text-transform: capitalize;">Developer</span></p>
+                
+                <div class="score-circle" id="score-circle">
+                    <span class="score-value" id="overall-score">0%</span>
+                </div>
+                <p id="score-verdict" style="font-weight: 600;">Calculating...</p>
+            </div>
+
+            <div class="report-section">
+                <h3>Technical Competency</h3>
+                <div id="tech-skills-container">
+                    <!-- Skills injected via JS -->
+                </div>
+            </div>
+
+            <div class="report-section">
+                <h3>HR Round Assessment</h3>
+                <ul class="feedback-list" id="hr-feedback-list">
+                    <!-- Feedback injected via JS -->
+                </ul>
+            </div>
+
+            <div class="report-section">
+                <h3>Strengths & Weaknesses</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <h4 style="color: var(--success); margin-bottom: 0.5rem;">✅ What you did well</h4>
+                        <ul class="feedback-list" id="strengths-list"></ul>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--danger); margin-bottom: 0.5rem;">⚠️ Areas to Improve</h4>
+                        <ul class="feedback-list" id="weaknesses-list"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="final-verdict">
+                <h2>Recommendation</h2>
+                <p id="final-hiring-text" style="font-size: 1.2rem; margin-top: 1rem;">...</p>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="btn btn-primary" onclick="location.reload()">Start New Interview</button>
+            </div>
+        </section>
+
+    </main>
+
+    <div class="toast" id="toast">Answer saved!</div>
+
+    <style>
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+    </style>
+
+    <script>
+        // --- Data Store ---
+        const DB = {
+            frontend: {
+                title: "Frontend Developer",
+                techQuestions: [
+                    { q: "What is the difference between `let`, `const`, and `var` in JavaScript?", diff: "Easy" },
+                    { q: "Explain the concept of the DOM (Document Object Model).", diff: "Easy" },
+                    { q: "What is the CSS `box-sizing` property and why is it useful?", diff: "Easy" },
+                    { q: "Describe the difference between `==` and `===`.", diff: "Easy" },
+                    { q: "Explain Event Bubbling and Event Capturing.", diff: "Medium" },
+                    { q: "What is a Closure in JavaScript? Provide an example.", diff: "Medium" },
+                    { q: "Explain the difference between `null` and `undefined`.", diff: "Medium" },
+                    { q: "What are React Hooks and why were they introduced?", diff: "Medium" },
+                    { q: "How do you optimize a website's performance (Assets, Rendering)?", diff: "Medium" },
+                    { q: "Explain the Virtual DOM and how it works.", diff: "Medium" },
+                    { q: "What is the purpose of the `key` prop in React lists?", diff: "Hard" },
+                    { q: "Describe the difference between state and props.", diff: "Hard" },
+                    { q: "How do you handle API calls in React? (Async/Await, Redux Saga, etc.)", diff: "Hard" },
+                    { q: "Explain `this` keyword context in JavaScript and how `.bind()`, `.call()`, `.apply()` work.", diff: "Hard" },
+                    { q: "What is a pure function and side effect in the context of functional programming?", diff: "Hard" }
+                ]
+            },
+            backend: {
+                title: "Backend Developer",
+                techQuestions: [
+                    { q: "What is the difference between SQL and NoSQL databases?", diff: "Easy" },
+                    { q: "Explain the concept of RESTful API design.", diff: "Easy" },
+                    { q: "What is an HTTP request? Name common methods.", diff: "Easy" },
+                    { q: "What is the difference between GET and POST?", diff: "Easy" },
+                    { q: "Explain what a Hash Map (Dictionary) is.", diff: "Medium" },
+                    { q: "What is Middleware in the context of Node.js/Express?", diff: "Medium" },
+                    { q: "How do you handle authentication and authorization?", diff: "Medium" },
+                    { q: "What is a database transaction and ACID properties?", diff: "Medium" },
+                    { q: "Explain the concept of Big O notation.", diff: "Medium" },
+                    { q: "What is the difference between Monolithic and Microservices architecture?", diff: "Medium" },
+                    { q: "How do you prevent SQL Injection?", diff: "Hard" },
+                    { q: "Explain the concept of Sharding.", diff: "Hard" },
+                    { q: "How do you handle long-running background processes?", diff: "Hard" },
+                    { q: "What is an Index in a database and how does it work?", diff: "Hard" },
+                    { q: "Explain Race Conditions and how to avoid them.", diff: "Hard" }
+                ]
+            },
+            fullstack: {
+                title: "Full Stack Engineer",
+                techQuestions: [
+                    { q: "Explain the request-response lifecycle of a web page.", diff: "Easy" },
+                    { q: "What is the difference between cookies, local storage, and session storage?", diff: "Easy" },
+                    { q: "What is CORS (Cross-Origin Resource Sharing)?", diff: "Medium" },
+                    { q: "How would you structure a Full Stack project folder?", diff: "Medium" },
+                    { q: "What is environment variable management?", diff: "Medium" },
+                    { q: "Explain the Model-View-Controller (MVC) pattern.", diff: "Medium" },
+                    { q: "How do you secure sensitive data in a database?", diff: "Hard" },
+                    { q: "Design a URL shortener system (High level overview).", diff: "Hard" },
+                    { q: "How do you choose between a SQL vs NoSQL database for a project?", diff: "Hard" },
+                    { q: "Explain Server-Side Rendering (SSR) vs Client-Side Rendering (CSR).", diff: "Hard" },
+                    { q: "What is Docker and why is it used in Full Stack development?", diff: "Hard" },
+                    { q: "How do you handle state management in a large app?", diff: "Hard" },
+                    { q: "What is CI/CD and why is it important?", diff: "Medium" },
+                    { q: "Explain the concept of Web Sockets.", diff: "Medium" },
+                    { q: "What is an API Gateway?", diff: "Hard" }
+                ]
+            },
+            devops: {
+                title: "DevOps Engineer",
+                techQuestions: [
+                    { q: "What is the difference between a Container and a Virtual Machine?", diff: "Easy" },
+                    { q: "What is CI/CD?", diff: "Easy" },
+                    { q: "Explain the basic Linux commands you use daily.", diff: "Easy" },
+                    { q: "What is version control? Why use Git?", diff: "Easy" },
+                    { q: "Explain the concept of Infrastructure as Code (IaC).", diff: "Medium" },
+                    { q: "What is Kubernetes and what problem does it solve?", diff: "Medium" },
+                    { q: "How do you monitor a production system?", diff: "Medium" },
+                    { q: "What is a Reverse Proxy?", diff: "Medium" },
+                    { q: "Explain Blue-Green Deployment strategy.", diff: "Medium" },
+                    { q: "What is Load Balancing?", diff: "Medium" },
+                    { q: "Explain the CAP theorem.", diff: "Hard" },
+                    { q: "How do you handle a 'P0' (critical) incident in production?", diff: "Hard" },
+                    { q: "What are Helm Charts in Kubernetes?", diff: "Hard" },
+                    { q: "Explain the difference between Process and Thread.", diff: "Hard" },
+                    { q: "Design a backup strategy for a critical database.", diff: "Hard" }
+                ]
+            },
+            data: {
+                title: "Data Scientist",
+                techQuestions: [
+                    { q: "What is the difference between supervised and unsupervised learning?", diff: "Easy" },
+                    { q: "Explain Bias and Variance tradeoff.", diff: "Medium" },
+                    { q: "What is a confusion matrix?", diff: "Easy" },
+                    { q: "Explain the difference between Type I and Type II errors.", diff: "Medium" },
+                    { q: "What is the Central Limit Theorem?", diff: "Hard" },
+                    { q: "How do you handle missing data?", diff: "Medium" },
+                    { q: "Explain Overfitting and Underfitting.", diff: "Medium" },
+                    { q: "What is regularization? (L1 vs L2)", diff: "Hard" },
+                    { q: "What is the difference between a Join and a Union in SQL?", diff: "Easy" },
+                    { q: "Explain Random Forest algorithm.", diff: "Hard" },
+                    { q: "How do you evaluate the performance of a regression model?", diff: "Medium" },
+                    { q: "What is p-value?", diff: "Hard" },
+                    { q: "Explain Gradient Descent.", diff: "Hard" },
+                    { q: "What are the assumptions of Linear Regression?", diff: "Hard" },
+                    { q: "How do you deploy a machine learning model?", diff: "Medium" }
+                ]
+            },
+            manager: {
+                title: "Product Manager",
+                techQuestions: [
+                    { q: "How do you prioritize features in a product roadmap?", diff: "Medium" },
+                    { q: "What is an MVP (Minimum Viable Product)?", diff: "Easy" },
+                    { q: "How do you handle conflict between engineering and design?", diff: "Medium" },
+                    { q: "Explain the Agile methodology.", diff: "Easy" },
+                    { q: "How do you say 'No' to a stakeholder request?", diff: "Medium" },
+                    { q: "What metrics would you track for a mobile app?", diff: "Medium" },
+                    { q: "Describe a time you failed and what you learned.", diff: "Hard" },
+                    { q: "How do you gather user requirements?", diff: "Medium" },
+                    { q: "What is the difference between Product Strategy and Product Tactics?", diff: "Hard" },
+                    { q: "How do you decide when to cut a feature?", diff: "Hard" },
+                    { q: "Explain A/B testing.", diff: "Medium" },
+                    { q: "How do you handle technical debt discussions?", diff: "Hard" },
+                    { q: "What tools do you use for project management?", diff: "Easy" },
+                    { q: "Describe your approach to user research.", diff: "Medium" },
+                    { q: "How do you define success for a new product launch?", diff: "Hard" }
+                ]
+            },
+            // Common HR Questions
+            hrQuestions: [
+                { q: "Tell me about yourself.", skill: "Communication" },
+                { q: "What is your greatest professional achievement?", skill: "Self Awareness" },
+                { q: "Describe a challenging work situation and how you overcame it.", skill: "Problem Solving" },
+                { q: "Why do you want to work for this company?", skill: "Motivation" },
+                { q: "Where do you see yourself in 5 years?", skill: "Mindset" }
+            ]
+        };
+
+        // --- Application State ---
+        let appState = {
+            currentRole: null,
+            questions: [],
+            currentQIndex: 0,
+            answers: [], // Stores { question, answer, type, difficulty/skill, isSkipped }
+            startTime: null,
+            timerInterval: null
+        };
+
+        // --- Utility Functions ---
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        function updateProgress(percent, text) {
+            document.getElementById('progress-fill').style.width = percent + '%';
+            document.getElementById('progress-percent').textContent = percent + '%';
+            if(text) document.getElementById('progress-text').textContent = text;
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            return `${mins}:${secs}`;
+        }
+
+        // --- Core Logic ---
+
+        function startInterview(roleKey) {
+            appState.currentRole = roleKey;
+            const roleData = DB[roleKey];
+            
+            // Combine Tech Questions + HR Questions
+            // Total: 15 Tech + 5 HR = 20 Questions
+            // However, user asked for at least 15 questions. Let's do exactly 15 Tech + 5 HR.
+            
+            const techQs = roleData.techQuestions.map(q => ({
+                ...q,
+                type: 'tech',
+                category: 'Technical'
+            }));
+
+            const hrQs = DB.hrQuestions.map(q => ({
+                ...q,
+                type: 'hr',
+                category: 'HR Round',
+                diff: q.skill // map skill to diff for unified logic
+            }));
+
+            appState.questions = [...techQs, ...hrQs];
+            appState.currentQIndex = 0;
+            appState.answers = [];
+
+            switchScreen('screen-interview');
+            loadQuestion();
+            startTimer();
+            updateProgress(0, "In Progress");
+        }
+
+        function startTimer() {
+            if(appState.timerInterval) clearInterval(appState.timerInterval);
+            let seconds = 0;
+            appState.startTime = Date.now();
+            
+            document.getElementById('timer').textContent = "00:00";
+            
+            appState.timerInterval = setInterval(() => {
+                seconds++;
+                document.getElementById('timer').textContent = formatTime(seconds);
+            }, 1000);
+        }
+
+        function loadQuestion() {
+            const q = appState.questions[appState.currentQIndex];
+            const total = appState.questions.length;
+            
+            // Update UI
+            document.getElementById('q-current').textContent = appState.currentQIndex + 1;
+            document.getElementById('q-total').textContent = total;
+            
+            const badge = document.getElementById('q-type-badge');
+            const diffLabel = document.getElementById('q-difficulty');
+
+            if (q.type === 'tech') {
+                badge.textContent = 'Technical Round';
+                badge.className = 'badge tech';
+                diffLabel.textContent = q.diff;
+                diffLabel.className = `difficulty-indicator diff-${q.diff.toLowerCase()}`;
+            } else {
+                badge.textContent = 'HR Round';
+                badge.className = 'badge hr';
+                diffLabel.textContent = q.skill;
+                diffLabel.className = 'difficulty-indicator diff-medium'; // Default color for HR
+            }
+
+            document.getElementById('question-text').textContent = q.q;
+            document.getElementById('answer-input').value = "";
+            
+            // Update Progress Bar based on questions completed
+            const progress = Math.round((appState.currentQIndex / total) * 100);
+            updateProgress(progress, "In Progress");
+
+            // Focus input
+            setTimeout(() => document.getElementById('answer-input').focus(), 100);
+        }
+
+        function submitAnswer() {
+            const answerText = document.getElementById('answer-input').value.trim();
+            const currentQ = appState.questions[appState.currentQIndex];
+
+            if (answerText.length < 5) {
+                alert("Please provide a more detailed answer to be properly evaluated.");
+                return;
+            }
+
+            // Save Answer
+            appState.answers.push({
+                question: currentQ.q,
+                answer: answerText,
+                type: currentQ.type,
+                diff: currentQ.diff, // or skill for HR
+                isSkipped: false,
+                timeTaken: Date.now() - appState.startTime // Mock time taking
+            });
+
+            nextStep();
+        }
+
+        function skipQuestion() {
+            const currentQ = appState.questions[appState.currentQIndex];
+            appState.answers.push({
+                question: currentQ.q,
+                answer: "",
+                type: currentQ.type,
+                diff: currentQ.diff,
+                isSkipped: true
+            });
+            showToast("Question Skipped");
+            nextStep();
+        }
+
+        function nextStep() {
+            appState.currentQIndex++;
+            
+            if (appState.currentQIndex < appState.questions.length) {
+                appState.startTime = Date.now(); // Reset timer for next question
+                loadQuestion();
+            } else {
+                finishInterview();
+            }
+        }
+
+        function finishInterview() {
+            clearInterval(appState.timerInterval);
+            updateProgress(100, "Analyzing...");
+            switchScreen('screen-loading');
+            
+            // Simulate analysis time
+            setTimeout(generateReport, 2500);
+        }
+
+        // --- Report Generation Logic (Simulated AI) ---
+        function generateReport() {
+            switchScreen('screen-report');
+            document.getElementById('report-role-name').textContent = DB[appState.currentRole].title;
+
+            // 1. Calculate Scores
+            // We use a heuristic based on answer length and keyword matching to simulate an evaluation.
+            // Real AI would need backend LLM API.
+            
+            let totalScore = 0;
+            let maxScore = appState.answers.length * 10;
+            let techPoints = 0;
+            let techCount = 0;
+            let hrPoints = 0;
+            let hrCount = 0;
+
+            const techSkills = {
+                'Easy': { score: 0, max: 0 },
+                'Medium': { score: 0, max: 0 },
+                'Hard': { score: 0, max: 0 }
+            };
+
+            appState.answers.forEach(ans => {
+                let points = 0;
+                if (!ans.isSkipped) {
+                    // Base points for attempting
+                    points += 5;
+                    // Length factor (simulating detail)
+                    if (ans.answer.length > 50) points += 2;
+                    if (ans.answer.length > 150) points += 2;
+                    // "Keyword" simulation (random variation to make it feel dynamic)
+                    points += Math.floor(Math.random() * 2);
+                }
+
+                if (points > 10) points = 10;
+                totalScore += points;
+
+                if (ans.type === 'tech') {
+                    techSkills[ans.diff].score += points;
+                    techSkills[ans.diff].max += 10;
+                    techPoints += points;
+                    techCount++;
+                } else {
+                    hrPoints += points;
+                    hrCount++;
+                }
+            });
+
+            const finalPercent = Math.round((totalScore / maxScore) * 100);
+            
+            // Update Score Circle
+            const circle = document.getElementById('score-circle');
+            circle.style.background = `conic-gradient(var(--primary) ${finalPercent}%, #e2e8f0 ${finalPercent}%)`;
+            document.getElementById('overall-score').textContent = `${finalPercent}%`;
+
+            // Verdict Text
+            const verdictEl = document.getElementById('score-verdict');
+            const finalHiringEl = document.getElementById('final-hiring-text');
+            
+            if (finalPercent >= 85) {
+                verdictEl.textContent = "Outstanding Performance";
+                verdictEl.style.color = "var(--success)";
+                finalHiringEl.textContent = "Strong Hire. We would be excited to extend an offer.";
+            } else if (finalPercent >= 70) {
+                verdictEl.textContent = "Good Performance";
+                verdictEl.style.color = "var(--primary)";
+                finalHiringEl.textContent = "Hire. Candidate meets the requirements well.";
+            } else if (finalPercent >= 50) {
+                verdictEl.textContent = "Average Performance";
+                verdictEl.style.color = "var(--warning)";
+                finalHiringEl.textContent = "Potential Hire (with reservations). Consider a second round.";
+            } else {
+                verdictEl.textContent = "Needs Improvement";
+                verdictEl.style.color = "var(--danger)";
+                finalHiringEl.textContent = "No Hire. Significant gaps in technical knowledge or communication.";
+            }
+
+            // 2. Build Skill Bars
+            const techContainer = document.getElementById('tech-skills-container');
+            techContainer.innerHTML = '';
+            
+            const skillsMap = [
+                { name: 'Basic Knowledge (Easy Qs)', val: techSkills['Easy'] },
+                { name: 'Intermediate (Medium Qs)', val: techSkills['Medium'] },
+                { name: 'Advanced (Hard Qs)', val: techSkills['Hard'] }
+            ];
+
+            skillsMap.forEach(skill => {
+                if (skill.val.max > 0) {
+                    const pct = Math.round((skill.val.score / skill.val.max) * 100);
+                    const html = `
+                        <div class="skill-bar-container">
+                            <div class="skill-label">
+                                <span>${skill.name}</span>
+                                <span>${pct}%</span>
+                            </div>
+                            <div class="skill-track">
+                                <div class="skill-fill" style="width: ${pct}%; background-color: ${getColorForPercent(pct)}"></div>
+                            </div>
+                        </div>
+                    `;
+                    techContainer.innerHTML += html;
+                }
+            });
+
+            // 3. HR Feedback
+            const hrList = document.getElementById('hr-feedback-list');
+            hrList.innerHTML = '';
+            
+            const hrAnswers = appState.answers.filter(a => a.type === 'hr');
+            hrAnswers.forEach((ans, idx) => {
+                // Randomize feedback slightly based on answer length
+                const isGood = ans.answer.length > 40;
+                const feedbackText = isGood 
+                    ? "Clear articulation of thoughts and good self-awareness." 
+                    : "Answer was too brief or lacked specific examples.";
+                
+                const icon = isGood ? '✓' : '!';
+                const iconClass = isGood ? 'icon-good' : 'icon-bad';
+                
+                const html = `
+                    <li class="feedback-item">
+                        <div class="feedback-icon ${iconClass}">${icon}</div>
+                        <div>
+                            <strong>Q: ${ans.question}</strong><br>
+                            <span style="color: ${isGood ? 'var(--success)' : 'var(--danger)'}">${feedbackText}</span>
+                        </div>
+                    </li>
+                `;
+                hrList.innerHTML += html;
+            });
+
+            // 4. Strengths & Weaknesses Generation
+            const strengthsList = document.getElementById('strengths-list');
+            const weaknessesList = document.getElementById('weaknesses-list');
+            strengthsList.innerHTML = '';
+            weaknessesList.innerHTML = '';
+
+            // Determine strengths (High scoring areas)
+            if (techSkills['Easy'].max > 0 && (techSkills['Easy'].score / techSkills['Easy'].max) > 0.8) {
+                addListItem(strengthsList, "Strong grasp of fundamental concepts.");
+            }
+            if (techSkills['Hard'].max > 0 && (techSkills['Hard'].score / techSkills['Hard'].max) > 0.7) {
+                addListItem(strengthsList, "Excellent depth of knowledge in complex topics.");
+            }
+            if (hrCount > 0 && (hrPoints / (hrCount * 10)) > 0.8) {
+                addListItem(strengthsList, "Strong communication and problem-solving mindset.");
+            }
+            // Fallback
+            if (strengthsList.innerHTML === '') addListItem(strengthsList, "Consistent attendance in the interview process.");
+
+            // Determine Weaknesses (Low scoring areas)
+            const skipped = appState.answers.filter(a => a.isSkipped).length;
+            if (skipped > 0) {
+                addListItem(weaknessesList, `Skipped ${skipped} questions indicating knowledge gaps.`);
+            }
+            if (techSkills['Medium'].max > 0 && (techSkills['Medium'].score / techSkills['Medium'].max) < 0.5) {
+                addListItem(weaknessesList, "Struggled with intermediate level technical problems.");
+            }
+            if (techSkills['Hard'].max > 0 && (techSkills['Hard'].score / techSkills['Hard'].max) < 0.4) {
+                addListItem(weaknessesList, "Lack of experience with advanced system architecture/scaling.");
+            }
+             // Fallback
+             if (weaknessesList.innerHTML === '') addListItem(weaknessesList, "Could improve answer depth with more examples.");
+        }
+
+        function addListItem(container, text) {
+            container.innerHTML += `<li class="feedback-item"><span>${text}</span></li>`;
+        }
+
+        function getColorForPercent(pct) {
+            if(pct < 50) return 'var(--danger)';
+            if(pct < 80) return 'var(--warning)';
+            return 'var(--success)';
+        }
+
+        // Animation for skill bars on render
+        setTimeout(() => {
+            const bars = document.querySelectorAll('.skill-fill');
+            // Just triggering reflow isn't enough in some strict browsers, but the transition in CSS handles load usually.
+            // Forcing a repaint ensures animation starts if needed.
+            bars.forEach(bar => {
+                const w = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => bar.style.width = w, 100);
+            });
+        }, 100);
+
+    </script>
+</body>
+</html>
