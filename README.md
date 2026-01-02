@@ -23,8 +23,8 @@ easy->medium->hard
 ![Image Alt Text](https://github.com/Vinaypal07/MOCK-MASTER/blob/main/Screenshot%202026-01-01%20175550.png)
 
 PURPOSE: 
-1)To conduct mock interviews to improve candidates confidence in interviews
-2)As well as to improve candidates knowledge 
-3)To remove the fear of interviews from the candidate so that they can perform well
-4)By using this web application you can analyse your weak points and improve 
-5)In fact candidates can keep track of their time so that they can improve their time management skills during problem solving 
+1)To conduct mock interviews to improve candidates confidence in interviews.
+2)As well as to improve candidates knowledge. 
+3)To remove the fear of interviews from the candidate so that they can perform well.
+4)By using this web application you can analyse your weak points and improve. 
+5)In fact candidates can keep track of their time so that they can improve their time management skills during problem solving. 
