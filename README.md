@@ -28,14 +28,14 @@ easy->medium->hard
 4)By using this web application you can analyse your weak points and improve. 
 5)In fact candidates can keep track of their time so that they can improve their time management skills during problem solving.
 ## TOOLS USED:
-  1)z.ai.chatbot-used in the final version of this product
-   2)replit-used to make prototype of this product for research and testing prupose
-   3)chatgpt-used for research purpose and collecting materials
-## techonology used:
+1)z.ai.chatbot-used in the final version of this product.
+2)replit-used to make prototype of this product for research and testing prupose.
+ 3)chatgpt-used for research purpose and collecting materials.
+## TECHNOLOGIES USED :
 1) machine learning
 2) deep learning
 3) natural language processing(NLP)
-## societal impact:
+## SOCIETAL IMPACT:
 Mock interviews 😊 can have a significant impact on society, especially in the context of job preparation and career development.
 
 ## Positive impacts:
