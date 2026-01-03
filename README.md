@@ -57,9 +57,6 @@ Mock interviews 😊 can have a significant impact on society, especially in the
 In India:
 - Common practice for competitive exams (UPSC, banking, tech interviews).
 - Coaching institutes and online platforms offer mock interviews.
-  
- DEMO LINK: 
--HERE YOU CAN TRY THE MOCK-MASTER : https://mock-master--vinaypalannola9.replit.app
 
 DEMO LINK:
 -> HERE IS THE LINK TO TRY MOCK-MASTER :  https://mock-master--vinaypalannola9.replit.app
