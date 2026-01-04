@@ -50,13 +50,5 @@ Mock interviews 😊 can have a significant impact on society, especially in the
 2. Efficient hiring process: Well-prepared candidates make the hiring process smoother for employers
 3. Promotes meritocracy: Fair evaluation of candidates based on skills and fit.
 
-   ## Potential drawbacks:
-1. Overemphasis on technique: Over-preparation might lead to candidates focusing too much on "acing" interviews rather than genuine skill development.
-2. Inequitable access: Not everyone has equal access to mock interview resources, creating a potential disadvantage.
-
-In India:
-- Common practice for competitive exams (UPSC, banking, tech interviews).
-- Coaching institutes and online platforms offer mock interviews.
-
 DEMO LINK:
 -> HERE IS THE LINK TO TRY MOCK-MASTER :  https://mock-master--vinaypalannola9.replit.app
