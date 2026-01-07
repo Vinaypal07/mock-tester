@@ -36,7 +36,7 @@ easy->medium->hard
 2) deep learning
 3) natural language processing(NLP)
 ## SOCIETAL IMPACT:
-Mock interviews 😊 can have a significant impact on society, especially in the context of job preparation and career development.
+Mock interviews can have a significant impact on society, especially in the context of job preparation and career development.
 
 ## Positive impacts:
 1. Boosts confidence: Helps individuals prepare for real interviews, reducing anxiety and nervousness.
